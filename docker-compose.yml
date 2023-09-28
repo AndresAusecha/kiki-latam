@@ -35,11 +35,9 @@ services:
     networks:
       - kiki-docker-network
     expose:
-      - 3001
+      - 3002
     ports: 
-      - "3001:3001"
-    depends_on:
-      - kiki-db
+      - "3002:3002"
   kiki-db:
     container_name: kiki-db
     hostname: kiki-db
@@ -56,12 +54,13 @@ services:
     networks:
       - kiki-docker-network
   rabbitmq:
+    hostname: rabbitmq
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
-      - "15672:15672"
     networks:
       - kiki-docker-network
 networks:
   kiki-docker-network:
     name: kiki-docker-network
+    driver: bridge
