@@ -1,0 +1,54 @@
+version: '3.5'
+
+services: 
+  envios:
+    build: 
+      context: ./envios-micro-service
+      dockerfile: Dockerfile
+    container_name: envios-micro-service
+    networks:
+      - kiki-docker-network
+    expose:
+      - 3000
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - kiki-db
+  tracking:
+    build: 
+      context: ./tracking-micro-service
+      dockerfile: Dockerfile
+    container_name: tracking-micro-service
+    networks:
+      - kiki-docker-network
+    expose:
+      - 3001
+    ports: 
+      - "3001:3001"
+    depends_on:
+      - kiki-db
+  kiki-db:
+    container_name: kiki-db
+    hostname: kiki-db
+    restart: always
+    image: postgres:15.4
+    expose:
+      - 5432
+    ports: 
+      - "5432:5432"
+    environment: 
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_PORT: 5432
+      
+    networks:
+      - kiki-docker-network
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - kiki-docker-network
+networks:
+  kiki-docker-network:
+    name: kiki-docker-network
