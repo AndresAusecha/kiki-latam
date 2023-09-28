@@ -3,7 +3,7 @@ version: '3.5'
 services: 
   envios:
     build: 
-      context: ./envios-micro-service
+      context: ../envios-micro-service
       dockerfile: Dockerfile
     container_name: envios-micro-service
     networks:
@@ -16,9 +16,22 @@ services:
       - kiki-db
   tracking:
     build: 
-      context: ./tracking-micro-service
+      context: ../tracking-micro-service
       dockerfile: Dockerfile
     container_name: tracking-micro-service
+    networks:
+      - kiki-docker-network
+    expose:
+      - 3001
+    ports: 
+      - "3001:3001"
+    depends_on:
+      - kiki-db
+  notifications:
+    build: 
+      context: ../notificaciones-micro-service
+      dockerfile: Dockerfile
+    container_name: notificaciones-micro-service
     networks:
       - kiki-docker-network
     expose:
